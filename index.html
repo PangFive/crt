@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Panduan interaktif Candle Range Theory untuk indikator CRT Pro: C1-C2-C3, CISD 30m ke 5m, entry/SL/TP, order flow, skor gate, killzone WIB, dan setup batal, versi bullish dan bearish.">
 <title>CRT Pro Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,7 +16,7 @@
 --ink:#0f1829;--ink-2:#45526b;--ink-3:#6f7b93;
 --bull:#128553;--bear:#bd590c;--range:#5d6d89;--sl:#bf3449;--tp:#0f7f79;--gold:#8d600a;--kz:#4b5d86;
 --bull-soft:rgba(18,133,83,.13);--bear-soft:rgba(189,89,12,.13);--sl-soft:rgba(191,52,73,.12);--tp-soft:rgba(15,127,121,.13);--gold-soft:rgba(141,96,10,.12);--kz-soft:rgba(75,93,134,.22);
---on-acc:#ffffff;
+--on-acc:#ffffff;color-scheme:light;
 --dirc:var(--bear);--dirc-soft:var(--bear-soft);
 --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
 --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -19,7 +26,8 @@
 :root[data-theme="dark"]{--bg:#0a0f1b;--panel:#0e1626;--panel-2:#141d31;--line:#223049;--line-2:#3a4a6c;--ink:#e3e9f5;--ink-2:#a0abc2;--ink-3:#7b88a2;--bull:#22b16c;--bear:#dd7e2a;--range:#8a99b5;--sl:#e05260;--tp:#26a69a;--gold:#e0b04e;--kz:#7f92bf;--bull-soft:rgba(34,177,108,.17);--bear-soft:rgba(221,126,42,.18);--sl-soft:rgba(224,82,96,.17);--tp-soft:rgba(38,166,154,.17);--gold-soft:rgba(224,176,78,.14);--kz-soft:rgba(127,146,191,.26);--on-acc:#0a0f1b;color-scheme:dark}
 body.dir-bull{--dirc:var(--bull);--dirc-soft:var(--bull-soft)}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:400 15.5px/1.65 var(--f-body);padding-inline:16px;padding-block:0 56px;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15.5px/1.65 var(--f-body);padding-inline:16px;padding-block:0 calc(56px + env(safe-area-inset-bottom,0px))}
 a{color:inherit}
 b,strong{font-weight:600}
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
@@ -221,7 +229,8 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 .nowl{stroke:var(--ink);stroke-width:2} .nowd{fill:var(--ink)}
 .tick{stroke:var(--line-2)}
 </style>
-
+</head>
+<body>
 <header class="bar">
   <div class="bar-in">
     <span class="brand"><b>CRT Pro</b> Playbook</span>
@@ -596,7 +605,7 @@ function renderModel(){
 /* 02 zoom */
 function renderZoom(){
   const el=$('#fig-zoom'),w=wOf(el),m=isM(w),lab=98,x0=4,pw=w-lab-x0,xl=x0+pw;
-  const tA=24,bA=tA+30*(m?4.6:6.2),tB=bA+70,bB=tB+30*(m?7:10),h=bB+36;
+  const tA=24,bA=tA+30*(m?6:6.2),tB=bA+70,bB=tB+30*(m?7:10),h=bB+36;
   const r=dom(4156,4186),YA=yS(r[0],r[1],tA,bA),YB=yS(r[0],r[1],tB,bB);
   const th=pw/3,st=pw/18,bwA=m?16:22,bwB=Math.max(4,Math.min(m?9:13,st*.6)),z=S.zoom;
   const cs=[0,1,2].map(i=>agg(SA.slice(i*6,i*6+6)));
@@ -957,3 +966,5 @@ renderAll();
 setInterval(()=>{try{renderKZ();}catch(e){}},60000);
 })();
 </script>
+</body>
+</html>
