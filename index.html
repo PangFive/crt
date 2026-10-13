@@ -54,7 +54,9 @@ h3{font-family:var(--f-display);font-weight:700;font-stretch:105%;font-size:16px
 .ptitle{display:flex;gap:8px;align-items:center;font:500 12px var(--f-mono);color:var(--ink-2)}
 .tf{font:600 11px/1 var(--f-mono);padding:4px 6px;border-radius:5px;background:var(--ink);color:var(--bg)}
 .fig{padding:12px 12px 4px;min-height:120px}
-.fig svg{display:block;max-width:100%;height:auto}
+.fig svg{display:block;max-width:100%;height:auto;margin-inline:auto}
+.bar-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media (max-width:600px){.viewseg{display:none}}
 .cap{padding:6px 14px 14px;color:var(--ink-2);font-size:14.5px;margin:0}
 .cap b{color:var(--ink)}
 .seg{display:inline-flex;flex-wrap:wrap;gap:3px;padding:3px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
@@ -223,9 +225,15 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <header class="bar">
   <div class="bar-in">
     <span class="brand"><b>CRT Pro</b> Playbook</span>
-    <div class="seg dirseg" role="group" aria-label="Arah setup">
-      <button data-k="dir" data-v="-1">▼ Bearish · sell</button>
-      <button data-k="dir" data-v="1">▲ Bullish · buy</button>
+    <div class="bar-ctl">
+      <div class="seg sm viewseg" role="group" aria-label="Ukuran chart">
+        <button data-k="view" data-v="hp">Mode HP</button>
+        <button data-k="view" data-v="lebar">Mode lebar</button>
+      </div>
+      <div class="seg dirseg" role="group" aria-label="Arah setup">
+        <button data-k="dir" data-v="-1">▼ Bearish · sell</button>
+        <button data-k="dir" data-v="1">▲ Bullish · buy</button>
+      </div>
     </div>
   </div>
 </header>
@@ -513,7 +521,7 @@ const SA=[...C1,...A2,...A3],SB=[...C1,...B2,...B3];
 
 let actualDst=1;
 try{const z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZoneName:'short'}).formatToParts(new Date()).find(x=>x.type==='timeZoneName');actualDst=z&&/EST/.test(z.value)?0:1;}catch(e){}
-const S={dir:-1,model:2,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
+const S={view:(()=>{try{return localStorage.getItem('crt-view')||'hp';}catch(e){return 'hp';}})(),dir:-1,model:2,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
 
 const P=p=>S.dir===-1?p:MIR-p;
 const mc=c=>S.dir===-1?c:{t:c.t,o:MIR-c.o,c:MIR-c.c,h:MIR-c.l,l:MIR-c.h,b:c.s,s:c.b};
@@ -531,7 +539,8 @@ const Rc=(x,y,w,h,c)=>`<rect class="${c}" x="${n1(x)}" y="${n1(y)}" width="${n1(
 const Cir=(x,y,r,c)=>`<circle class="${c}" cx="${n1(x)}" cy="${n1(y)}" r="${r}"/>`;
 const cdl=(x,bw,c,Y,k)=>{const d=c.c>c.o?'up':c.c<c.o?'dn':'fl';const t=Y(Math.max(c.o,c.c)),b=Y(Math.min(c.o,c.c));return `<g class="cdl ${d} ${k||''}">${L(x,Y(c.h),x,Y(c.l),'wk')}${Rc(x-bw/2,t,bw,Math.max(1.6,b-t),'bd')}</g>`;};
 const SVG=(w,h,inner,aria,defs)=>`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${aria}">${defs?'<defs>'+defs+'</defs>':''}${inner}</svg>`;
-const wOf=el=>Math.max(272,Math.floor(el.clientWidth-24));
+const wOf=el=>{const full=Math.max(272,Math.floor(el.clientWidth-24));return S.view==='hp'?Math.min(full,440):full;};
+const isM=w=>S.view==='hp'||w<520;
 const lvName=base=>P(base)>=4170?'CRT H':'CRT L';
 const sgn=v=>(v>0?'+':v<0?'−':'')+Math.abs(Math.round(v)).toLocaleString('en-US');
 const num=v=>(v<0?'−':'')+Math.abs(Math.round(v)).toLocaleString('en-US');
@@ -559,9 +568,9 @@ function cisdStates(src){
 
 /* 01 model */
 function renderModel(){
-  const el=$('#fig-model'),w=wOf(el),lab=134,x0=4,pw=w-lab-x0,h=262,top=36,bot=206,xl=x0+pw;
+  const el=$('#fig-model'),w=wOf(el),m=isM(w),lab=134,x0=4,pw=w-lab-x0,top=36,bot=top+30*(m?7:10),h=bot+56,xl=x0+pw;
   const cs=[agg(SA.slice(0,6)),agg(SA.slice(6,12)),agg(SA.slice(12,18))];
-  const r=dom(4156,4186),Y=yS(r[0],r[1],top,bot),st=pw/3,bw=Math.min(48,st*.36),cx=i=>x0+st*(i+.5),s=S.model;
+  const r=dom(4156,4186),Y=yS(r[0],r[1],top,bot),bw=m?20:26,st=Math.min(pw/3,bw*(m?3.4:4.2)),gx=x0+(pw-st*3)/2,cx=i=>gx+st*(i+.5),s=S.model;
   let g='',defs='';
   if(s>=1){const a=Y(P(4180)),b=Y(P(4183));g+=Rc(cx(1)-st*.45,Math.min(a,b),st*.9,Math.abs(a-b),'zone');}
   g+=L(x0,Y(P(4180)),xl,Y(P(4180)),'lv rng')+L(x0,Y(P(4170)),xl,Y(P(4170)),'lv eq')+L(x0,Y(P(4160)),xl,Y(P(4160)),'lv rng');
@@ -586,9 +595,10 @@ function renderModel(){
 
 /* 02 zoom */
 function renderZoom(){
-  const el=$('#fig-zoom'),w=wOf(el),lab=98,x0=4,pw=w-lab-x0,h=390,tA=22,bA=118,tB=186,bB=352,xl=x0+pw;
+  const el=$('#fig-zoom'),w=wOf(el),m=isM(w),lab=98,x0=4,pw=w-lab-x0,xl=x0+pw;
+  const tA=24,bA=tA+30*(m?4.6:6.2),tB=bA+70,bB=tB+30*(m?7:10),h=bB+36;
   const r=dom(4156,4186),YA=yS(r[0],r[1],tA,bA),YB=yS(r[0],r[1],tB,bB);
-  const th=pw/3,st=pw/18,bwA=Math.min(34,th*.3),bwB=Math.max(4,Math.min(12,st*.58)),z=S.zoom;
+  const th=pw/3,st=pw/18,bwA=m?16:22,bwB=Math.max(4,Math.min(m?9:13,st*.6)),z=S.zoom;
   const cs=[0,1,2].map(i=>agg(SA.slice(i*6,i*6+6)));
   let g='';
   g+=Rc(x0+th*z+1,tB-8,th-2,bB-tB+16,'band');
@@ -622,9 +632,9 @@ const CISD_TXT={
 16:'Harga lanjut ke [4163].',
 17:'Menyentuh CRT {L|H} [4160]: TP2 tercapai.'};
 function renderCisd(){
-  const el=$('#fig-cisd'),w=wOf(el),lab=120,x0=4,pw=w-lab-x0,h=298,top=32,bot=226,xl=x0+pw;
+  const el=$('#fig-cisd'),w=wOf(el),m=isM(w),lab=120,x0=4,pw=w-lab-x0,top=32,bot=top+29*(m?7.5:10.5),h=bot+72,xl=x0+pw;
   const st=cisdStates(SA),ci=5+S.cstep,cur=st[ci],vis=SA.slice(5,18),cc=SA[ci];
-  const r=dom(4157,4186),Y=yS(r[0],r[1],top,bot),step=pw/13,bw=Math.max(5,Math.min(14,step*.56)),cx=j=>x0+step*(j+.5);
+  const r=dom(4157,4186),Y=yS(r[0],r[1],top,bot),step=pw/13,bw=Math.max(5,Math.min(m?10:15,step*.56)),cx=j=>x0+step*(j+.5);
   let g='';
   g+=Rc(cx(ci-5)-step/2,top-10,step,bot-top+20,'curband');
   [1,7].forEach(j=>{g+=L(x0+step*j,8,x0+step*j,bot+8,'sep');});
@@ -653,9 +663,9 @@ function renderCisd(){
 /* 04 entry */
 function trade(){const m=S.entry==='market',ent=m?4172:4175,sl=4183+S.buf,risk=sl-ent,rew=ent-4160;return{m,ent,ei:m?13:14,t0:m?'07:05':'07:10',sl,tp1:4170,tp2:4160,risk,rew,rr:rew/risk};}
 function renderEntry(){
-  const el=$('#fig-entry'),w=wOf(el),lab=144,x0=4,pw=w-lab-x0,h=282,top=26,bot=244,xl=x0+pw;
+  const el=$('#fig-entry'),w=wOf(el),m=isM(w),lab=144,x0=4,pw=w-lab-x0,top=26,bot=top+31*(m?7:10),h=bot+38,xl=x0+pw;
   const tr=trade(),vis=SA.slice(6,18),r=dom(4157,4188),Y=yS(r[0],r[1],top,bot);
-  const step=pw/12,bw=Math.max(5,Math.min(15,step*.56)),cx=j=>x0+step*(j+.5),xe=cx(tr.ei-6)-bw/2-2;
+  const step=pw/12,bw=Math.max(5,Math.min(m?10:15,step*.56)),cx=j=>x0+step*(j+.5),xe=cx(tr.ei-6)-bw/2-2;
   const ye=Y(P(tr.ent)),ys=Y(P(tr.sl)),yt1=Y(P(tr.tp1)),yt2=Y(P(tr.tp2)),yc=Y(P(4175));
   let g='';
   g+=Rc(xe,Math.min(ye,ys),xl-xe,Math.abs(ye-ys),'boxr')+Rc(xe,Math.min(ye,yt2),xl-xe,Math.abs(ye-yt2),'boxt');
@@ -695,9 +705,10 @@ function ofAnalyze(src,n){
   return{r,c1hi,cvRef,cvs,hi,lvl:sn.lvl,lvlI:sn.lvlI,done,cin,ci,trap,div,dok};
 }
 function renderOF(){
-  const el=$('#fig-of'),w=wOf(el),lab=114,x0=4,pw=w-lab-x0,h=382,tP=26,bP=192,dz=240,dh=28,tC=292,bC=348,xl=x0+pw;
+  const el=$('#fig-of'),w=wOf(el),m=isM(w),lab=114,x0=4,pw=w-lab-x0,xl=x0+pw;
+  const tP=26,bP=tP+35*(m?6.2:8.5),dh=m?28:38,dz=bP+20+dh,tC=dz+dh+24,bC=tC+(m?58:90),h=bC+34;
   const src=S.of==='A'?SA:SB,n=S.ofn,a=ofAnalyze(src,n),sg=S.dir===-1?1:-1;
-  const r=dom(4157,4192),Y=yS(r[0],r[1],tP,bP),step=pw/18,bw=Math.max(4,Math.min(12,step*.58)),cx=i=>x0+step*(i+.5);
+  const r=dom(4157,4192),Y=yS(r[0],r[1],tP,bP),step=pw/18,bw=Math.max(4,Math.min(m?8:12,step*.58)),cx=i=>x0+step*(i+.5);
   const dmax=Math.max(...src.map(c=>Math.abs(c.b-c.s))),DY=d=>dz-(d*sg)/dmax*dh;
   const cvd=a.cvs.map(v=>v*sg),cmin=Math.min(...cvd),cmax=Math.max(...cvd),pad=(cmax-cmin)*.12,CY=yS(cmin-pad,cmax+pad,tC,bC);
   let g='';
@@ -781,7 +792,7 @@ function sim(){
   return{tr,pts,ev,R,ex,remain};
 }
 function renderMgmt(){
-  const el=$('#fig-mgmt'),w=wOf(el),lab=118,x0=8,pw=w-lab-x0-6,h=236,top=24,bot=204,xl=x0+pw+6;
+  const el=$('#fig-mgmt'),w=wOf(el),m=isM(w),lab=118,x0=8,pw=w-lab-x0-6,top=24,bot=top+32*(m?6:8.5),h=bot+32,xl=x0+pw+6;
   const s=sim(),tr=s.tr,r=dom(4157,4189),Y=yS(r[0],r[1],top,bot),N=s.pts.length-1,dx=pw/N,X=i=>x0+dx*i,fav=S.dir===-1?1:-1;
   let g='';
   [[tr.sl,'lv sl'],[tr.ent,'lv ent'],[tr.tp1,'lv tp1'],[tr.tp2,'lv tp']].forEach(q=>{g+=L(x0,Y(P(q[0])),xl,Y(P(q[0])),q[1]);});
@@ -833,7 +844,7 @@ function renderGate(){
   renderSMT();
 }
 function renderSMT(){
-  const el=$('#fig-smt'),w=wOf(el),lab=96,x0=8,pw=w-lab-x0-6,h=180,top=30,bot=148,xl=x0+pw+6;
+  const el=$('#fig-smt'),w=wOf(el),m=isM(w),lab=96,x0=8,pw=w-lab-x0-6,top=30,bot=top+(m?118:180),h=bot+32,xl=x0+pw+6;
   const ag=S.g_smt==='gagal'?AGN:AGD,mp=v=>S.dir===-1?v:100-v,all=GOLD.concat(ag).map(mp);
   const lo=Math.min(...all)-6,hi=Math.max(...all)+6,Y=v=>top+(hi-mp(v))/(hi-lo)*(bot-top),X=i=>x0+pw*i/(GOLD.length-1);
   let g=L(X(5.5),10,X(5.5),bot+6,'sep')+T(X(2.7),14,'C1','lbl mut','middle')+T(X(8.7),14,'C2','lbl mut','middle');
@@ -887,9 +898,9 @@ const FAIL={
  deep:{c2:[4178,4193,4175,4177],c3:[4177,4179,4165,4168],msg:'tidak ada setup',lines:[['max',4190,'batas sweep ']],
    txt:'C2 menembus 13 poin di luar range, lebih dari batas 0,5 × range C1 (10 poin). Gerakan sedalam itu lebih mirip ekspansi daripada manipulasi, jadi tidak dihitung sebagai C2.'}};
 function renderFail(){
-  const f=FAIL[S.fail],el=$('#fig-fail'),w=wOf(el),lab=136,x0=4,pw=w-lab-x0,h=240,top=30,bot=196,xl=x0+pw;
+  const f=FAIL[S.fail],el=$('#fig-fail'),w=wOf(el),m=isM(w),lab=136,x0=4,pw=w-lab-x0,top=30,bot=top+39*(m?5.6:7.6),h=bot+44,xl=x0+pw;
   const cs=[[4164,4180,4160,4178],f.c2,f.c3].map((a,i)=>({t:['06:00','06:30','07:00'][i],o:a[0],h:a[1],l:a[2],c:a[3]}));
-  const r=dom(4156,4195),Y=yS(r[0],r[1],top,bot),st=pw/3,bw=Math.min(42,st*.34),cx=i=>x0+st*(i+.5);
+  const r=dom(4156,4195),Y=yS(r[0],r[1],top,bot),bw=m?20:26,st=Math.min(pw/3,bw*(m?3.4:4.2)),gx=x0+(pw-st*3)/2,cx=i=>gx+st*(i+.5);
   let g=L(x0,Y(P(4180)),xl,Y(P(4180)),'lv rng')+L(x0,Y(P(4160)),xl,Y(P(4160)),'lv rng');
   const items=[{y:Y(P(4180)),text:lvName(4180)+' '+fp(4180),c:'rng'},{y:Y(P(4160)),text:lvName(4160)+' '+fp(4160),c:'rng'}];
   f.lines.forEach(q=>{const y=Y(P(q[1])),cls=q[0]==='cisd'?'lv cisd':q[0]==='ext'?'lv sl':'lv mx';g+=L(cx(1)-st*.4,y,xl,y,cls);items.push({y,text:q[2]+fp(q[1]),c:q[0]==='cisd'?'cisd':q[0]==='ext'?'sl':'mut'});});
@@ -925,6 +936,7 @@ document.addEventListener('click',e=>{
   const k=b.dataset.k,v=b.dataset.v;
   if(k==='minsc')S.minsc=Math.max(0,Math.min(5,S.minsc+(v==='inc'?1:-1)));
   else S[k]=(v!==''&&!isNaN(+v))?+v:v;
+  if(k==='view'){try{localStorage.setItem('crt-view',S.view);}catch(err){}}
   if(k==='of'){stopPlay('ofn');S.ofn=18;}
   renderAll();
 });
