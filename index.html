@@ -63,8 +63,6 @@ h3{font-family:var(--f-display);font-weight:700;font-stretch:105%;font-size:16px
 .tf{font:600 11px/1 var(--f-mono);padding:4px 6px;border-radius:5px;background:var(--ink);color:var(--bg)}
 .fig{padding:12px 12px 4px;min-height:120px}
 .fig svg{display:block;max-width:100%;height:auto;margin-inline:auto}
-.bar-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-@media (max-width:600px){.viewseg{display:none}}
 .cap{padding:6px 14px 14px;color:var(--ink-2);font-size:14.5px;margin:0}
 .cap b{color:var(--ink)}
 .seg{display:inline-flex;flex-wrap:wrap;gap:3px;padding:3px;border:1px solid var(--line);border-radius:9px;background:var(--panel)}
@@ -234,15 +232,9 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 <header class="bar">
   <div class="bar-in">
     <span class="brand"><b>CRT Pro</b> Playbook</span>
-    <div class="bar-ctl">
-      <div class="seg sm viewseg" role="group" aria-label="Ukuran chart">
-        <button data-k="view" data-v="hp">Mode HP</button>
-        <button data-k="view" data-v="lebar">Mode lebar</button>
-      </div>
-      <div class="seg dirseg" role="group" aria-label="Arah setup">
-        <button data-k="dir" data-v="-1">▼ Bearish · sell</button>
-        <button data-k="dir" data-v="1">▲ Bullish · buy</button>
-      </div>
+    <div class="seg dirseg" role="group" aria-label="Arah setup">
+      <button data-k="dir" data-v="-1">▼ Bearish · sell</button>
+      <button data-k="dir" data-v="1">▲ Bullish · buy</button>
     </div>
   </div>
 </header>
@@ -530,7 +522,7 @@ const SA=[...C1,...A2,...A3],SB=[...C1,...B2,...B3];
 
 let actualDst=1;
 try{const z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZoneName:'short'}).formatToParts(new Date()).find(x=>x.type==='timeZoneName');actualDst=z&&/EST/.test(z.value)?0:1;}catch(e){}
-const S={view:(()=>{try{return localStorage.getItem('crt-view')||'hp';}catch(e){return 'hp';}})(),dir:-1,model:2,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
+const S={dir:-1,model:2,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
 
 const P=p=>S.dir===-1?p:MIR-p;
 const mc=c=>S.dir===-1?c:{t:c.t,o:MIR-c.o,c:MIR-c.c,h:MIR-c.l,l:MIR-c.h,b:c.s,s:c.b};
@@ -548,8 +540,8 @@ const Rc=(x,y,w,h,c)=>`<rect class="${c}" x="${n1(x)}" y="${n1(y)}" width="${n1(
 const Cir=(x,y,r,c)=>`<circle class="${c}" cx="${n1(x)}" cy="${n1(y)}" r="${r}"/>`;
 const cdl=(x,bw,c,Y,k)=>{const d=c.c>c.o?'up':c.c<c.o?'dn':'fl';const t=Y(Math.max(c.o,c.c)),b=Y(Math.min(c.o,c.c));return `<g class="cdl ${d} ${k||''}">${L(x,Y(c.h),x,Y(c.l),'wk')}${Rc(x-bw/2,t,bw,Math.max(1.6,b-t),'bd')}</g>`;};
 const SVG=(w,h,inner,aria,defs)=>`<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${aria}">${defs?'<defs>'+defs+'</defs>':''}${inner}</svg>`;
-const wOf=el=>{const full=Math.max(272,Math.floor(el.clientWidth-24));return S.view==='hp'?Math.min(full,440):full;};
-const isM=w=>S.view==='hp'||w<520;
+const wOf=el=>Math.max(272,Math.floor(el.clientWidth-24));
+const isM=w=>w<520;
 const lvName=base=>P(base)>=4170?'CRT H':'CRT L';
 const sgn=v=>(v>0?'+':v<0?'−':'')+Math.abs(Math.round(v)).toLocaleString('en-US');
 const num=v=>(v<0?'−':'')+Math.abs(Math.round(v)).toLocaleString('en-US');
@@ -945,7 +937,6 @@ document.addEventListener('click',e=>{
   const k=b.dataset.k,v=b.dataset.v;
   if(k==='minsc')S.minsc=Math.max(0,Math.min(5,S.minsc+(v==='inc'?1:-1)));
   else S[k]=(v!==''&&!isNaN(+v))?+v:v;
-  if(k==='view'){try{localStorage.setItem('crt-view',S.view);}catch(err){}}
   if(k==='of'){stopPlay('ofn');S.ofn=18;}
   renderAll();
 });
