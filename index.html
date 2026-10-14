@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Panduan interaktif Candle Range Theory untuk indikator CRT Pro: C1-C2-C3, CISD 30m ke 5m, entry/SL/TP, order flow, skor gate, killzone WIB, dan setup batal, versi bullish dan bearish.">
+<meta name="description" content="Panduan interaktif Candle Range Theory untuk indikator CRT Pro: C1-C2-C3, CISD 30m ke 5m, entry/SL/TP, order flow, skor gate, lokasi HTF, killzone WIB, dan setup batal, versi bullish dan bearish.">
 <title>CRT Pro Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -226,6 +226,13 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 .exbox{fill:none;stroke:var(--gold);stroke-width:1.7}
 .nowl{stroke:var(--ink);stroke-width:2} .nowd{fill:var(--ink)}
 .tick{stroke:var(--line-2)}
+.fvgz{fill:var(--panel-2);stroke:var(--line-2);stroke-dasharray:3 3}
+.fvgz.on{fill:var(--tp-soft);stroke:var(--tp);stroke-dasharray:none}
+.offz{opacity:.3}
+.lv.hitl{stroke:var(--tp);stroke-width:1.7}
+.spanb{fill:var(--gold-soft)}
+.spanl{stroke:var(--gold);stroke-dasharray:4 3;stroke-width:1.2}
+.duo p{margin:0;color:var(--ink-2);font-size:14.5px}
 </style>
 </head>
 <body>
@@ -259,9 +266,10 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
       <li><a href="#orderflow"><span>05</span>Order flow dan footprint</a></li>
       <li><a href="#manage"><span>06</span>Mengelola posisi</a></li>
       <li><a href="#gates"><span>07</span>Skor gate dan grade</a></li>
-      <li><a href="#killzone"><span>08</span>Killzone dalam WIB</a></li>
-      <li><a href="#fail"><span>09</span>Kapan setup batal</a></li>
-      <li><a href="#sheet"><span>10</span>Ringkasan dua arah</a></li>
+      <li><a href="#lokasi"><span>08</span>Lokasi HTF</a></li>
+      <li><a href="#killzone"><span>09</span>Killzone dalam WIB</a></li>
+      <li><a href="#fail"><span>10</span>Kapan setup batal</a></li>
+      <li><a href="#sheet"><span>11</span>Ringkasan dua arah</a></li>
     </ol>
     <p class="fine">Harga dan volume di halaman ini fiktif, dibuat untuk belajar. Bukan saran trading.</p>
   </section>
@@ -412,9 +420,9 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
       <div class="gates">
         <div class="gate"><p>Bias 4H<small>Arah CRT terakhir di 4 jam yang belum batal</small></p>
           <div class="seg sm" role="group" aria-label="Bias"><button data-k="g_bias" data-v="searah">Searah</button><button data-k="g_bias" data-v="netral">Netral</button><button data-k="g_bias" data-v="lawan">Lawan</button><button data-k="g_bias" data-v="off">Off</button></div></div>
-        <div class="gate"><p>Lokasi HTF<small>Sweep menyentuh FVG 4H, PDH/PDL, atau high/low 4H</small></p>
+        <div class="gate"><p>Lokasi HTF<small>Sweep menyentuh FVG 4H, PDH/PDL, atau high/low 4H (bagian 8)</small></p>
           <div class="seg sm" role="group" aria-label="Lokasi"><button data-k="g_loc" data-v="lolos">Lolos</button><button data-k="g_loc" data-v="gagal">Gagal</button><button data-k="g_loc" data-v="off">Off</button></div></div>
-        <div class="gate"><p>Killzone<small>Entry terjadi di London, NY AM, atau NY PM (bagian 8)</small></p>
+        <div class="gate"><p>Killzone<small>Entry terjadi di London, NY AM, atau NY PM (bagian 9)</small></p>
           <div class="seg sm" role="group" aria-label="Killzone"><button data-k="g_kz" data-v="lolos">Lolos</button><button data-k="g_kz" data-v="gagal">Gagal</button><button data-k="g_kz" data-v="off">Off</button></div></div>
         <div class="gate"><p>Order flow<small>Minimal satu dari Δ, Trap, Div (bagian 5)</small></p>
           <div class="seg sm" role="group" aria-label="Order flow"><button data-k="g_of" data-v="lolos">Lolos</button><button data-k="g_of" data-v="gagal">Gagal</button><button data-k="g_of" data-v="off">Off</button></div></div>
@@ -440,8 +448,47 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
     </figure>
   </section>
 
+  <section class="ch" id="lokasi">
+    <div class="ch-head"><span class="ch-num">08</span><div><p class="eyebrow">gate lokasi · 4H</p><h2>Lokasi HTF: di mana sweep terjadi</h2></div></div>
+    <p>Gate Lokasi mengecek apakah sweep C2 mengambil likuiditas di level penting timeframe besar (default 4H). CRT Pro membuat <b>rentang cek</b> dari sisi range yang disapu (CRT H untuk sell, CRT L untuk buy) sampai ujung sweep, ditambah toleransi 0,1 × range C1. Gate lolos kalau FVG 4H yang belum tertutup, PDH/PDL, atau high/low 4H sebelumnya ada di dalam rentang itu. Pilih skenario, lalu geser kedalaman sweep.</p>
+    <figure class="panel">
+      <div class="pbar">
+        <div class="ptitle"><span class="tf">30m</span><span class="tf">4H</span>Sweep vs level HTF</div>
+        <div class="seg sm" role="group" aria-label="Skenario lokasi">
+          <button data-k="locsc" data-v="tidak">Tidak kena</button>
+          <button data-k="locsc" data-v="fvg">Kena FVG</button>
+          <button data-k="locsc" data-v="pdh">Kena PDH/PDL</button>
+          <button data-k="locsc" data-v="semua">Konfluensi</button>
+        </div>
+      </div>
+      <div class="fig" id="fig-loc"></div>
+      <div class="ctrl">
+        <div class="range"><label for="dep">Kedalaman sweep</label><input type="range" id="dep" min="0.5" max="10" step="0.5" value="3"><output id="dep-out"></output></div>
+      </div>
+      <div class="ctrl" style="padding-top:0">
+        <span class="stamp">Level dicek</span>
+        <div class="seg sm" role="group" aria-label="Level HTF yang dicek">
+          <button data-k="lt" data-v="lf">FVG 4H</button>
+          <button data-k="lt" data-v="lp">PDH/PDL</button>
+          <button data-k="lt" data-v="lh">High/low 4H</button>
+        </div>
+      </div>
+      <p class="math" id="math-loc"></p>
+      <ul class="checks" id="loc-checks" style="margin-top:10px"></ul>
+      <div class="msg">Dashboard CRT Pro <code id="loc-dash"></code></div>
+      <div class="verdict" id="loc-verdict" style="margin-top:10px"></div>
+      <figcaption class="cap" id="cap-loc"></figcaption>
+    </figure>
+    <figure class="panel">
+      <div class="pbar"><div class="ptitle"><span class="tf">4H</span>Cara FVG terbentuk</div></div>
+      <div class="fig" id="fig-fvg"></div>
+      <figcaption class="cap" id="cap-fvg"></figcaption>
+    </figure>
+    <div class="duo" id="loc-defs"></div>
+  </section>
+
   <section class="ch" id="killzone">
-    <div class="ch-head"><span class="ch-num">08</span><div><p class="eyebrow">waktu</p><h2>Killzone dalam WIB</h2></div></div>
+    <div class="ch-head"><span class="ch-num">09</span><div><p class="eyebrow">waktu</p><h2>Killzone dalam WIB</h2></div></div>
     <p>Killzone di CRT Pro diset dalam jam New York supaya otomatis ikut pergantian DST di Amerika. Ini posisinya dalam jam WIB, termasuk jam rollover emas saat pasar tutup.</p>
     <figure class="panel">
       <div class="pbar">
@@ -465,7 +512,7 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
   </section>
 
   <section class="ch" id="fail">
-    <div class="ch-head"><span class="ch-num">09</span><div><p class="eyebrow">invalidasi</p><h2>Kapan setup batal</h2></div></div>
+    <div class="ch-head"><span class="ch-num">10</span><div><p class="eyebrow">invalidasi</p><h2>Kapan setup batal</h2></div></div>
     <p>Tahu kapan melepas setup sama pentingnya dengan tahu kapan masuk. Pilih kasusnya; teks di bawah chart adalah label yang dipasang CRT Pro di chart.</p>
     <figure class="panel">
       <div class="pbar">
@@ -484,7 +531,7 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
   </section>
 
   <section class="ch" id="sheet">
-    <div class="ch-head"><span class="ch-num">10</span><div><p class="eyebrow">cheat sheet</p><h2>Ringkasan dua arah</h2></div></div>
+    <div class="ch-head"><span class="ch-num">11</span><div><p class="eyebrow">cheat sheet</p><h2>Ringkasan dua arah</h2></div></div>
     <p>Aturannya sama, hanya dicerminkan. Kolom yang disorot mengikuti arah yang dipilih di bilah atas.</p>
     <div class="tbl wide"><table>
       <thead><tr><th>Langkah</th><th class="csell">Sell · bearish</th><th class="cbuy">Buy · bullish</th></tr></thead>
@@ -499,6 +546,7 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
         <tr><td>TP1</td><td class="csell">EQ 50%, tutup sebagian, SL ke BE</td><td class="cbuy">EQ 50%, tutup sebagian, SL ke BE</td></tr>
         <tr><td>TP2</td><td class="csell">CRT L</td><td class="cbuy">CRT H</td></tr>
         <tr><td>Order flow</td><td class="csell">Buyer agresif di sweep tapi close lemah; CVD gagal membuat high baru; delta negatif kuat saat CISD</td><td class="cbuy">Seller agresif di sweep tapi close kuat; CVD gagal membuat low baru; delta positif kuat saat CISD</td></tr>
+        <tr><td>Lokasi HTF</td><td class="csell">Sweep menyentuh FVG bearish 4H, PDH, atau high 4H sebelumnya</td><td class="cbuy">Sweep menyentuh FVG bullish 4H, PDL, atau low 4H sebelumnya</td></tr>
         <tr><td>SMT</td><td class="csell">XAUUSD higher high, XAGUSD lower high</td><td class="cbuy">XAUUSD lower low, XAGUSD higher low</td></tr>
         <tr><td>Batal</td><td class="csell">High sweep tertembus sebelum CISD, atau C3 selesai tanpa CISD</td><td class="cbuy">Low sweep tertembus sebelum CISD, atau C3 selesai tanpa CISD</td></tr>
       </tbody>
@@ -522,7 +570,7 @@ const SA=[...C1,...A2,...A3],SB=[...C1,...B2,...B3];
 
 let actualDst=1;
 try{const z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZoneName:'short'}).formatToParts(new Date()).find(x=>x.type==='timeZoneName');actualDst=z&&/EST/.test(z.value)?0:1;}catch(e){}
-const S={dir:-1,model:2,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
+const S={dir:-1,model:2,locsc:'tidak',dep:3,lf:1,lp:1,lh:1,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
 
 const P=p=>S.dir===-1?p:MIR-p;
 const mc=c=>S.dir===-1?c:{t:c.t,o:MIR-c.o,c:MIR-c.c,h:MIR-c.l,l:MIR-c.h,b:c.s,s:c.b};
@@ -685,7 +733,7 @@ function renderEntry(){
   $('#buf-out').textContent=fmt(S.buf)+' poin';
   $('#cap-entry').innerHTML=tr.m
     ?tw('<b>Market.</b> {Sell|Buy} di close candle 07:05, saat CISD terkonfirmasi. Pasti terisi, tapi harga sudah {turun|naik} 3 poin dari level CISD, jadi jarak ke SL lebih lebar dan RR mengecil.')
-    :tw('<b>Limit.</b> Setelah CISD terkonfirmasi, {sell|buy} limit dipasang di level CISD [4175] dan terisi saat candle 07:10 retrace ke [4175.4]. Risiko lebih kecil, RR lebih besar, tapi kalau harga langsung lari tanpa retrace, order tidak terisi (bagian 9).');
+    :tw('<b>Limit.</b> Setelah CISD terkonfirmasi, {sell|buy} limit dipasang di level CISD [4175] dan terisi saat candle 07:10 retrace ke [4175.4]. Risiko lebih kecil, RR lebih besar, tapi kalau harga langsung lari tanpa retrace, order tidak terisi (bagian 10).');
 }
 
 /* 05 order flow */
@@ -862,7 +910,77 @@ function renderSMT(){
   $('#cap-smt').innerHTML=cap;
 }
 
-/* 08 killzone */
+/* 08 lokasi */
+const LOCS={
+ tidak:{fvg:[4188,4194],pd:4197,hl:4191.5,dep:3},
+ fvg:{fvg:[4184,4190],pd:4196,hl:4193,dep:5},
+ pdh:{fvg:[4190,4196],pd:4182.5,hl:4194.5,dep:3},
+ semua:{fvg:[4182,4187],pd:4183.5,hl:4185,dep:4}};
+const LOC_TXT={
+ tidak:'<b>Level HTF jauh.</b> Level terdekat adalah FVG 4H mulai [4188]. Sweep yang berhenti sebelum itu terjadi di tengah tanpa mengambil likuiditas penting, seperti di chart XAUUSD yang kita bahas. Geser kedalaman sweep sampai rentang cek menyentuh FVG, lalu lihat gate berubah.',
+ fvg:'<b>Kena FVG.</b> C2 masuk ke FVG {bearish|bullish} 4H yang belum tertutup. Harga pernah meninggalkan area ini dengan cepat, jadi {seller|buyer} cenderung masuk lagi di sana dan menolak harga.',
+ pdh:'<b>Kena {PDH|PDL}.</b> Sweep mengambil {high|low} kemarin di [4182.5]. Stop {buyer|seller} yang ditaruh {di atas|di bawah} level itu tersapu, dan likuiditas itulah yang dibutuhkan harga untuk {turun|naik}.',
+ semua:'<b>Konfluensi.</b> FVG 4H, {PDH|PDL}, dan {high|low} 4H sebelumnya berkumpul di area yang sama. Ini lokasi sweep paling kuat, dan dashboard menampilkan ketiganya.'};
+const zr=(a,b)=>{const x=P(a),y=P(b);return fmt(Math.min(x,y))+'–'+fmt(Math.max(x,y));};
+function renderLoc(){
+  const el=$('#fig-loc'),w=wOf(el),m=isM(w),lab=150,x0=4,pw=w-lab-x0,top=22,bot=top+(m?7:9)*43,h=bot+46,xl=x0+pw;
+  const L0=LOCS[S.locsc],tol=2,sw=4180+S.dep,lo=4180-tol,hi=sw+tol;
+  const r=dom(4156,4199),Y=yS(r[0],r[1],top,bot),yy=p=>Y(P(p)),bw=m?20:26,st=bw*(m?3.2:3.8),cx=i=>x0+st*(i+.65);
+  const inS=v=>v>=lo&&v<=hi;
+  const fH=!!S.lf&&L0.fvg[1]>=lo&&L0.fvg[0]<=hi,pH=!!S.lp&&inS(L0.pd),hH=!!S.lh&&inS(L0.hl);
+  let g=Rc(x0,Math.min(yy(lo),yy(hi)),pw,Math.abs(yy(lo)-yy(hi)),'spanb')+L(x0,yy(lo),xl,yy(lo),'spanl')+L(x0,yy(hi),xl,yy(hi),'spanl');
+  g+=Rc(x0,Math.min(yy(L0.fvg[0]),yy(L0.fvg[1])),pw,Math.abs(yy(L0.fvg[0])-yy(L0.fvg[1])),'fvgz'+(fH?' on':'')+(S.lf?'':' offz'));
+  g+=L(x0,yy(4180),xl,yy(4180),'lv rng')+L(x0,yy(4160),xl,yy(4160),'lv rng');
+  g+=L(x0,yy(L0.pd),xl,yy(L0.pd),'lv '+(pH?'hitl':'mx')+(S.lp?'':' offz'));
+  g+=L(x0,yy(L0.hl),xl,yy(L0.hl),'lv '+(hH?'hitl':'mx')+(S.lh?'':' offz'));
+  g+=cdl(cx(0),bw,mc({o:4164,h:4180,l:4160,c:4178}),Y,'dim')+cdl(cx(1),bw,mc({o:4178,h:sw,l:4174.5,c:4177}),Y,'');
+  const ys=yy(sw);g+=T(cx(1),S.dir===-1?ys-10:ys+10,'sweep','lbl dir strong','middle');
+  g+=T(cx(0),bot+20,'C1','cl','middle')+T(cx(1),bot+20,'C2','cl on','middle')+T(cx(0),bot+36,'06:00','lbl mut','middle')+T(cx(1),bot+36,'06:30','lbl mut','middle');
+  const tg=(hit,on)=>on?(hit?'✓ ':''):'off ';
+  const nPD=W2('PDH','PDL'),nHL=W2('High 4H','Low 4H');
+  g+=rlab([
+    {y:yy(4180),text:lvName(4180)+' '+fp(4180),c:'rng'},
+    {y:yy(4160),text:lvName(4160)+' '+fp(4160),c:'rng'},
+    {y:(yy(lo)+yy(hi))/2,text:'cek '+zr(lo,hi),c:'gold'},
+    {y:(yy(L0.fvg[0])+yy(L0.fvg[1]))/2,text:tg(fH,S.lf)+'FVG '+zr(L0.fvg[0],L0.fvg[1]),c:fH?'tp':'mut'},
+    {y:yy(L0.pd),text:tg(pH,S.lp)+nPD+' '+fp(L0.pd),c:pH?'tp':'mut'},
+    {y:yy(L0.hl),text:tg(hH,S.lh)+nHL+' '+fp(L0.hl),c:hH?'tp':'mut'}],xl,xl+8,8,h-8,14);
+  el.innerHTML=SVG(w,h,g,'Rentang sweep C2 dibandingkan dengan level HTF');
+  $('#dep-out').textContent=fmt(S.dep)+' poin';
+  $('#math-loc').textContent=`Toleransi = 0,1 × range C1 (20 poin) = 2 poin · Rentang cek = ${lvName(4180)} ${fp(4180)} ${W2('−','+')} 2 sampai ujung sweep ${fp(sw)} ${W2('+','−')} 2 = ${zr(lo,hi)}`;
+  const gap=(a,b)=>a>hi?a-hi:lo-b;
+  const where=v=>v>hi?W2('di atas','di bawah'):W2('di bawah','di atas');
+  const row=(name,on,hit,a,b,lv)=>[name,!on?'na':hit?'ok':'no',!on?'dimatikan':hit?`${lv} menyentuh rentang cek`:`${lv} · ${fmt(gap(a,b))} poin ${where(a)} rentang cek`];
+  const rows=[
+    row(`FVG ${W2('bearish','bullish')} 4H belum tertutup`,S.lf,fH,L0.fvg[0],L0.fvg[1],'zona '+zr(L0.fvg[0],L0.fvg[1])),
+    row(W2('PDH · high kemarin','PDL · low kemarin'),S.lp,pH,L0.pd,L0.pd,fp(L0.pd)),
+    row(W2('High','Low')+' candle 4H sebelumnya',S.lh,hH,L0.hl,L0.hl,fp(L0.hl))];
+  const IC={ok:'✓',no:'✕',na:'–'};
+  $('#loc-checks').innerHTML=rows.map(x=>`<li class="${x[1]}"><i aria-hidden="true">${IC[x[1]]}</i><div>${x[0]}<small>${x[2]}</small></div></li>`).join('');
+  const txt=[fH?'FVG':'',pH?nPD:'',hH?'HTF-HL':''].filter(Boolean).join(' ');
+  $('#loc-dash').textContent='Lokasi '+(txt?'✔ '+txt:'✖ tidak di level HTF');
+  const v=$('#loc-verdict'),any=fH||pH||hH,none=!S.lf&&!S.lp&&!S.lh;
+  v.className='verdict '+(any?'ok':'bad');
+  v.textContent=any?`Gate Lokasi lolos: sweep menyentuh ${[fH?'FVG 4H':'',pH?nPD:'',hH?nHL+' sebelumnya':''].filter(Boolean).join(', ')}. Skor setup +1 (bagian 7).`
+    :none?'Semua level dimatikan, jadi gate Lokasi selalu gagal. Kalau tidak ingin memakai gate ini, matikan "Lokasi" di pengaturan CRT Pro.'
+    :'Gate Lokasi gagal: rentang cek tidak menyentuh level HTF mana pun. Sweep terjadi di tengah, jadi setup tidak mendapat poin dari lokasi.';
+  $('#cap-loc').innerHTML=tw(LOC_TXT[S.locsc]);
+  $('#loc-defs').innerHTML=`<div><h3>${nPD}</h3><p>${tw('{High|Low} candle Daily kemarin. Stop {buyer|seller} dan order breakout menumpuk {di atasnya|di bawahnya}, jadi sweep ke sini mengambil likuiditas besar.')}</p></div><div><h3>${W2('High','Low')} 4H sebelumnya</h3><p>${tw('{High|Low} candle 4H terakhir yang sudah close. Ini level likuiditas terdekat di timeframe bias, dan berganti setiap 4 jam.')}</p></div>`;
+  renderFvg();
+}
+function renderFvg(){
+  const el=$('#fig-fvg'),w=wOf(el),m=isM(w),lab=124,x0=4,pw=w-lab-x0,top=20,bot=top+(m?7:9)*26,h=bot+34,xl=x0+pw;
+  const r=dom(4172,4198),Y=yS(r[0],r[1],top,bot),yy=p=>Y(P(p)),bw=m?20:26,st=bw*(m?2.6:3.2),cx=i=>x0+st*(i+.65);
+  const cs=[{o:4196,h:4197,l:4190,c:4191},{o:4191,h:4192,l:4176,c:4177},{o:4177,h:4184,l:4174,c:4182}];
+  const yA=yy(4190),yC=yy(4184),xs=cx(0)-bw/2;
+  let g=Rc(xs,Math.min(yA,yC),xl-xs,Math.abs(yA-yC),'zone')+L(xs,yA,xl,yA,'lv eq')+L(cx(2)-bw/2,yC,xl,yC,'lv eq');
+  cs.forEach((c,i)=>{g+=cdl(cx(i),bw,mc(c),Y,'')+T(cx(i),bot+20,['A','B','C'][i],'cl on','middle');});
+  g+=rlab([{y:yA,text:W2('low','high')+' A '+fp(4190),c:'dir'},{y:(yA+yC)/2,text:'FVG',c:'strong'},{y:yC,text:W2('high','low')+' C '+fp(4184),c:'dir'}],xl,xl+8,8,h-8,14);
+  el.innerHTML=SVG(w,h,g,'Pembentukan FVG dari tiga candle 4H');
+  $('#cap-fvg').innerHTML=tw(`FVG {bearish|bullish} terbentuk dari tiga candle 4H. Candle B bergerak terlalu cepat, sehingga {low|high} candle A dan {high|low} candle C tidak bertemu. Celah ${zr(4184,4190)} dihitung sebagai FVG yang belum tertutup sampai ada candle 4H yang close {di atas|di bawah} [4190]. Celah ini sama dengan zona di skenario "Kena FVG".`);
+}
+
+/* 09 killzone */
 const KZ=[{n:'NY PM',a:13*60+30,b:16*60,on:1},{n:'Asia',a:20*60,b:23*60+59,on:0},{n:'London',a:2*60,b:5*60,on:1},{n:'NY AM',a:7*60,b:10*60,on:1}];
 const ROW={'NY PM':0,'Asia':0,'NY AM':0,'London':1,'Rollover':1};
 function nowWIB(){try{const p=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jakarta',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());const q=k=>+p.find(x=>x.type===k).value;return q('hour')*60+q('minute');}catch(e){const d=new Date();return((d.getUTCHours()+7)%24)*60+d.getUTCMinutes();}}
@@ -914,14 +1032,14 @@ function renderFail(){
 
 /* wiring */
 function syncPressed(){
-  document.querySelectorAll('button[data-k]').forEach(b=>{const k=b.dataset.k;if(k==='minsc')return;b.setAttribute('aria-pressed',String(S[k])===b.dataset.v?'true':'false');});
-  $('#buf').value=S.buf;$('#part').value=S.part;
+  document.querySelectorAll('button[data-k]').forEach(b=>{const k=b.dataset.k;if(k==='minsc')return;if(k==='lt'){b.setAttribute('aria-pressed',S[b.dataset.v]?'true':'false');return;}b.setAttribute('aria-pressed',String(S[k])===b.dataset.v?'true':'false');});
+  $('#buf').value=S.buf;$('#part').value=S.part;$('#dep').value=S.dep;
 }
 function renderAll(){
   document.body.classList.toggle('dir-bull',S.dir===1);
   document.body.classList.toggle('dir-bear',S.dir===-1);
   syncPressed();
-  [renderModel,renderZoom,renderCisd,renderEntry,renderOF,renderMgmt,renderGate,renderKZ,renderFail].forEach(fn=>{try{fn();}catch(err){console.error(err);}});
+  [renderModel,renderZoom,renderCisd,renderEntry,renderOF,renderMgmt,renderGate,renderLoc,renderKZ,renderFail].forEach(fn=>{try{fn();}catch(err){console.error(err);}});
 }
 const timers={};
 const playBtn={cstep:'#c-play',ofn:'#o-play'};
@@ -936,7 +1054,9 @@ document.addEventListener('click',e=>{
   const b=e.target.closest('[data-k]');if(!b)return;
   const k=b.dataset.k,v=b.dataset.v;
   if(k==='minsc')S.minsc=Math.max(0,Math.min(5,S.minsc+(v==='inc'?1:-1)));
+  else if(k==='lt')S[v]=S[v]?0:1;
   else S[k]=(v!==''&&!isNaN(+v))?+v:v;
+  if(k==='locsc')S.dep=LOCS[v].dep;
   if(k==='of'){stopPlay('ofn');S.ofn=18;}
   renderAll();
 });
@@ -950,6 +1070,7 @@ $('#o-reset').addEventListener('click',()=>{stopPlay('ofn');S.ofn=1;renderAll();
 $('#o-play').addEventListener('click',()=>play('ofn',1,18));
 $('#buf').addEventListener('input',e=>{S.buf=+e.target.value;renderAll();});
 $('#part').addEventListener('input',e=>{S.part=+e.target.value;renderAll();});
+$('#dep').addEventListener('input',e=>{S.dep=+e.target.value;renderAll();});
 let rz=null,lastW=0;
 const ro=new ResizeObserver(()=>{const wNow=document.querySelector('main').clientWidth;if(wNow===lastW)return;lastW=wNow;clearTimeout(rz);rz=setTimeout(renderAll,60);});
 ro.observe(document.querySelector('main'));
