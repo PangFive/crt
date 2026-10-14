@@ -489,7 +489,8 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 
   <section class="ch" id="killzone">
     <div class="ch-head"><span class="ch-num">09</span><div><p class="eyebrow">waktu</p><h2>Killzone dalam WIB</h2></div></div>
-    <p>Killzone di CRT Pro diset dalam jam New York supaya otomatis ikut pergantian DST di Amerika. Ini posisinya dalam jam WIB, termasuk jam rollover emas saat pasar tutup.</p>
+    <p><b>Killzone</b> adalah jam ketika pelaku besar (bank, dana, market maker) paling aktif, terutama di pembukaan sesi London dan New York. Volume dan likuiditas melonjak, jadi sweep dan pergerakan sungguhan paling sering terjadi di jam-jam ini. Di luar killzone, harga cenderung sideways dan sweep lebih sering hanya noise. Gate Killzone di CRT Pro lolos kalau candle entry terjadi di dalam salah satu killzone yang aktif.</p>
+    <p>Jam killzone diset dalam waktu New York supaya otomatis ikut pergantian DST di Amerika. Ini posisinya dalam jam WIB, termasuk jam rollover emas saat pasar tutup.</p>
     <figure class="panel">
       <div class="pbar">
         <div class="ptitle">24 jam · WIB</div>
@@ -509,6 +510,12 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
       <p class="status" id="kz-status"></p>
       <div class="tbl mid"><table><thead><tr><th>Sesi</th><th>Jam New York</th><th>Jam WIB</th><th>CRT Pro</th></tr></thead><tbody id="kz-rows"></tbody></table></div>
     </figure>
+    <div class="duo">
+      <div><h3>London</h3><p>Pembukaan Eropa. Sering menyapu high atau low sesi Asia, lalu menentukan arah hari itu.</p></div>
+      <div><h3>NY AM</h3><p>Volume tertinggi karena tumpang tindih dengan London, dan banyak data ekonomi AS rilis pukul 08.30 New York. Banyak setup terbaik muncul di sini.</p></div>
+      <div><h3>NY PM</h3><p>Sesi sore New York. Volume lebih rendah dari NY AM; sering berisi lanjutan terakhir atau pembalikan sebelum pasar tutup.</p></div>
+      <div><h3>Asia</h3><p>Volume rendah dan biasanya membentuk range yang nanti disapu London. Mati di default; untuk crypto bisa dinyalakan karena pasarnya buka 24 jam.</p></div>
+    </div>
   </section>
 
   <section class="ch" id="fail">
