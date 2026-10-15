@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Panduan interaktif Candle Range Theory untuk indikator CRT Pro: C1-C2-C3, CISD 30m ke 5m, entry/SL/TP, order flow, skor gate, lokasi HTF, killzone WIB, dan setup batal, versi bullish dan bearish.">
+<meta name="description" content="Panduan interaktif Candle Range Theory untuk indikator CRT Pro: C1-C2-C3, CISD 30m ke 5m, entry/SL/TP, order flow, skor gate, lokasi HTF, killzone WIB, proyeksi 30m dan 4H, dan setup batal, versi bullish dan bearish.">
 <title>CRT Pro Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -233,6 +233,21 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
 .spanb{fill:var(--gold-soft)}
 .spanl{stroke:var(--gold);stroke-dasharray:4 3;stroke-width:1.2}
 .duo p{margin:0;color:var(--ink-2);font-size:14.5px}
+.trio{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.trio>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.trio p{margin:0;color:var(--ink-2);font-size:14.5px}
+.tf.gold{background:var(--gold);color:var(--on-acc)}
+.tf.rngc{background:var(--range);color:var(--on-acc)}
+.rows{border-top:1px solid var(--line)}
+.rows>div{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);align-items:baseline}
+.rows span{font:500 12px var(--f-mono);color:var(--ink-3)}
+.rows b{text-align:right;font:500 13px var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.rows b.dir{color:var(--dirc)} .rows b.gold{color:var(--gold)} .rows b.ok{color:var(--tp)} .rows b.mut{color:var(--ink-3)} .rows b.bad{color:var(--sl)}
+.g30b{fill:var(--panel-2)} .g4b{fill:var(--gold-soft)}
+.lv.hx{stroke:var(--gold);stroke-dasharray:1 3;stroke-width:1.2}
+.lv.hxeq{stroke:var(--gold);stroke-dasharray:1 5;opacity:.6}
+.cdl.livec .bd{stroke:var(--ink);stroke-width:1;stroke-dasharray:2 2}
+.trimk{fill:var(--dirc)}
 </style>
 </head>
 <body>
@@ -269,7 +284,8 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
       <li><a href="#lokasi"><span>08</span>Lokasi HTF</a></li>
       <li><a href="#killzone"><span>09</span>Killzone dalam WIB</a></li>
       <li><a href="#fail"><span>10</span>Kapan setup batal</a></li>
-      <li><a href="#sheet"><span>11</span>Ringkasan dua arah</a></li>
+      <li><a href="#proyeksi"><span>11</span>Proyeksi 30m dan 4H di chart</a></li>
+      <li><a href="#sheet"><span>12</span>Ringkasan dua arah</a></li>
     </ol>
     <p class="fine">Harga dan volume di halaman ini fiktif, dibuat untuk belajar. Bukan saran trading.</p>
   </section>
@@ -537,8 +553,46 @@ footer{max-width:800px;margin:64px auto 0;padding-top:16px;border-top:1px solid 
     </figure>
   </section>
 
+  <section class="ch" id="proyeksi">
+    <div class="ch-head"><span class="ch-num">11</span><div><p class="eyebrow">di chart TradingView</p><h2>Proyeksi 30m dan 4H di chart</h2></div></div>
+    <p>Di kanan candle terakhir, CRT Pro menggambar tiga candle CRT Timeframe (30m). Kalau <b>Proyeksi candle HTF</b> dinyalakan, tiga candle HTF (default ikut Bias TF, 4H) ikut digambar di sebelahnya. Semuanya memakai skala harga yang sama, jadi setup 30m terlihat kecil karena ia hanya bagian dari candle C3 4H yang sedang berjalan. Tekan Putar: candle 5m berjalan tick demi tick, dan candle C3 di kedua grup ikut bergerak.</p>
+    <figure class="panel">
+      <div class="pbar">
+        <div class="ptitle"><span class="tf">5m</span><span class="tf rngc">30m</span><span class="tf gold">4H</span>Proyeksi CRT Pro</div>
+        <div class="seg sm" role="group" aria-label="Proyeksi HTF">
+          <button data-k="pjh" data-v="1">4H tampil</button>
+          <button data-k="pjh" data-v="0">Sembunyikan 4H</button>
+        </div>
+      </div>
+      <div class="fig" id="fig-proj"></div>
+      <div class="ctrl">
+        <button class="btn" id="pj-play">▶ Putar</button>
+        <button class="btn" id="pj-reset">Ulang dari 07:00</button>
+        <div class="seg sm" role="group" aria-label="Tipe entry">
+          <button data-k="entry" data-v="market">Market</button>
+          <button data-k="entry" data-v="limit">Limit</button>
+        </div>
+        <div class="range"><label for="pj-t">Waktu</label><input type="range" id="pj-t" min="1" max="60" step="1" value="28"><output id="pj-out"></output></div>
+      </div>
+      <div class="rows" id="pj-rows" role="table" aria-label="Ringkasan dashboard"></div>
+      <figcaption class="cap" id="cap-proj" style="padding-top:12px"></figcaption>
+    </figure>
+    <div class="trio" id="pj-trio"></div>
+    <div class="tbl mid"><table>
+      <thead><tr><th>Pengaturan · grup 6 Tampilan</th><th>Default</th><th>Fungsi</th></tr></thead>
+      <tbody>
+        <tr><td>Proyeksi candle CRT (C1-C2-C3) di kanan</td><td>On</td><td>Tiga candle 30m di kanan chart</td></tr>
+        <tr><td>Proyeksi candle HTF (C1-C2-C3) di samping</td><td>On</td><td>Tiga candle HTF di kanan grup 30m</td></tr>
+        <tr><td>Timeframe HTF</td><td>Kosong = Bias TF (4H)</td><td>Ganti kalau ingin HTF lain, misalnya 1H atau D</td></tr>
+        <tr><td>Jarak dari proyeksi 30m</td><td>3 bar</td><td>Jarak antara grup 30m dan grup HTF</td></tr>
+        <tr><td>Garis H / EQ / L candle C1 HTF</td><td>On</td><td>Garis titik dan label harga di kanan grup HTF</td></tr>
+        <tr><td>Warna HTF</td><td>Emas</td><td>Warna label, garis, dan tag grup HTF</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
   <section class="ch" id="sheet">
-    <div class="ch-head"><span class="ch-num">11</span><div><p class="eyebrow">cheat sheet</p><h2>Ringkasan dua arah</h2></div></div>
+    <div class="ch-head"><span class="ch-num">12</span><div><p class="eyebrow">cheat sheet</p><h2>Ringkasan dua arah</h2></div></div>
     <p>Aturannya sama, hanya dicerminkan. Kolom yang disorot mengikuti arah yang dipilih di bilah atas.</p>
     <div class="tbl wide"><table>
       <thead><tr><th>Langkah</th><th class="csell">Sell · bearish</th><th class="cbuy">Buy · bullish</th></tr></thead>
@@ -577,7 +631,7 @@ const SA=[...C1,...A2,...A3],SB=[...C1,...B2,...B3];
 
 let actualDst=1;
 try{const z=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',timeZoneName:'short'}).formatToParts(new Date()).find(x=>x.type==='timeZoneName');actualDst=z&&/EST/.test(z.value)?0:1;}catch(e){}
-const S={dir:-1,model:2,locsc:'tidak',dep:3,lf:1,lp:1,lh:1,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
+const S={dir:-1,model:2,pjt:28,pjh:1,locsc:'tidak',dep:3,lf:1,lp:1,lh:1,zoom:1,cstep:8,entry:'market',buf:1,of:'A',ofn:18,path:'tp2',part:50,be:1,g_bias:'searah',g_loc:'gagal',g_kz:'gagal',g_of:'lolos',g_smt:'lolos',minsc:2,dst:actualDst,fail:'breakout'};
 
 const P=p=>S.dir===-1?p:MIR-p;
 const mc=c=>S.dir===-1?c:{t:c.t,o:MIR-c.o,c:MIR-c.c,h:MIR-c.l,l:MIR-c.h,b:c.s,s:c.b};
@@ -987,6 +1041,83 @@ function renderFvg(){
   $('#cap-fvg').innerHTML=tw(`FVG {bearish|bullish} terbentuk dari tiga candle 4H. Candle B bergerak terlalu cepat, sehingga {low|high} candle A dan {high|low} candle C tidak bertemu. Celah ${zr(4184,4190)} dihitung sebagai FVG yang belum tertutup sampai ada candle 4H yang close {di atas|di bawah} [4190]. Celah ini sama dengan zona di skenario "Kena FVG".`);
 }
 
+/* 11 proyeksi 30m + 4H */
+const H4P=[{o:4160,h:4196,l:4154,c:4188},{o:4188,h:4202,l:4180,c:4190}],H4PRE={o:4190,h:4192,l:4162},H4LV={h:4196,l:4154,eq:4175};
+const PJ_PATH=A3.map(b=>{const up=b.c>=b.o,a=up?b.l:b.h,z=up?b.h:b.l,p=[b.o];const seg=(f,t,n)=>{for(let i=1;i<=n;i++)p.push(f+(t-f)*i/n);};seg(b.o,a,3);seg(a,z,3);seg(z,b.c,3);return p;});
+function pjState(){
+  const k=Math.floor((S.pjt-1)/10),j=(S.pjt-1)%10,path=PJ_PATH[k].slice(0,j+1),b=A3[k];
+  const live=A3.slice(0,k).concat([{t:b.t,o:b.o,h:Math.max(...path),l:Math.min(...path),c:path[j]}]);
+  const all=C1.concat(A2,live),done=j===9,tr=trade();
+  const cisd=k>1||(k===1&&done);
+  const filled=tr.m?cisd:(k>2||(k===2&&Math.max(...path)>=4175));
+  const pass=tr.rr>=1.5,entry=filled&&pass;
+  let lo=Infinity;for(let i=tr.ei+1;i<all.length;i++)lo=Math.min(lo,all[i].l);
+  const a4=agg(all);
+  return{k,j,all,tr,cisd,filled,pass,entry,price:path[j],live:all[all.length-1],tp1:entry&&lo<=4170,tp2:entry&&lo<=4160,
+    c30:[agg(all.slice(0,6)),agg(all.slice(6,12)),agg(all.slice(12))],
+    h4:[H4P[0],H4P[1],{o:H4PRE.o,h:Math.max(H4PRE.h,a4.h),l:Math.min(H4PRE.l,a4.l),c:a4.c}]};
+}
+function renderProj(){
+  const st=pjState(),el=$('#fig-proj'),w=wOf(el),m=isM(w),lab=m?100:124,x0=4,pw=w-lab-x0;
+  const N=18,g1=m?2:3,g2=m?2:4,grp=11,slots=N+g1+grp+(S.pjh?g2+grp:0)+1,sw=pw/slots;
+  const top=36,bot=top+(m?10.5:12)*56,h=bot+40,xl=x0+pw;
+  const r=dom(4150,4206),Y=yS(r[0],r[1],top,bot),yy=p=>Y(P(p));
+  const XL=s=>x0+s*sw,xs=s=>XL(s+.5),bw=Math.max(2.6,sw*.64),mw=sw*2.6,x30=N+g1,x4=N+g1+grp+g2,c2t=W2('▼','▲');
+  let g=Rc(XL(x30)-sw*.4,top-28,grp*sw+sw*.8,bot-top+34,'g30b');
+  if(S.pjh)g+=Rc(XL(x4)-sw*.4,top-28,grp*sw+sw*.8,bot-top+34,'g4b');
+  [6,12].forEach(i=>{g+=L(XL(i),top-16,XL(i),bot,'sep');});
+  ['C1','C2','C3'].forEach((t,i)=>{g+=T(XL(i*6+3),top-20,t,'lbl mut','middle');});
+  const eM=XL(N),eG=S.pjh?XL(x4+grp):XL(x30+grp);
+  g+=L(x0,yy(4180),eM,yy(4180),'lv rng')+L(x0,yy(4170),eM,yy(4170),'lv eq')+L(x0,yy(4160),eM,yy(4160),'lv rng');
+  g+=L(eM,yy(4180),eG,yy(4180),'lv mx')+L(eM,yy(4160),eG,yy(4160),'lv mx');
+  const cEnd=st.cisd?13:st.all.length-1,yc=yy(4175);g+=L(xs(7),yc,xs(cEnd),yc,'lv cisd');
+  st.all.forEach((c,i)=>{g+=cdl(xs(i),bw,mc(c),Y,'');});
+  {const c=mc(st.all[9]);g+=T(xs(9),S.dir===-1?Y(c.h)-10:Y(c.l)+11,'sweep','lbl dir strong','middle');}
+  if(st.entry){const c=mc(st.all[st.tr.ei]),x=xs(st.tr.ei),tag=W2('SELL','BUY');
+    if(S.dir===-1){const y=Y(c.h)-6;g+=`<path class="trimk" d="M${n1(x-5)} ${n1(y-8)}L${n1(x+5)} ${n1(y-8)}L${n1(x)} ${n1(y)}Z"/>`+T(x,y-16,tag,'lbl dir strong','middle');}
+    else{const y=Y(c.l)+6;g+=`<path class="trimk" d="M${n1(x-5)} ${n1(y+8)}L${n1(x+5)} ${n1(y+8)}L${n1(x)} ${n1(y)}Z"/>`+T(x,y+16,tag,'lbl dir strong','middle');}}
+  const mini=(x,cs,tags,cls)=>cs.map((c,i)=>{const cx=XL(x+i*4)+1.5*sw,d=mc(c);return cdl(cx,mw,d,Y,i===2?'livec':'')+T(cx,Y(d.h)-9,tags[i],'lbl '+cls[i],'middle');}).join('');
+  g+=L(XL(x30),yy(4180),XL(x30+grp),yy(4180),'lv rng')+L(XL(x30),yy(4160),XL(x30+grp),yy(4160),'lv rng');
+  g+=mini(x30,st.c30,['C1','C2 '+c2t,'C3'],['rng','dir strong','strong']);
+  g+=T(XL(x30+grp/2),top-20,'30m','lbl rng strong','middle')+T(XL(x30+grp/2),bot+18,'CRT','lbl rng','middle');
+  const items=[{y:yy(4180),text:lvName(4180)+' '+fp(4180),c:'rng'},{y:yy(4160),text:lvName(4160)+' '+fp(4160),c:'rng'},{y:yc,text:'CISD '+fp(4175),c:'cisd'}];
+  if(S.pjh){
+    const a=XL(x4),b=XL(x4+grp);
+    g+=L(a,yy(H4LV.h),b,yy(H4LV.h),'lv hx')+L(a,yy(H4LV.eq),b,yy(H4LV.eq),'lv hxeq')+L(a,yy(H4LV.l),b,yy(H4LV.l),'lv hx');
+    g+=mini(x4,st.h4,['C1','C2 '+c2t,'C3'],['gold','dir strong','strong']);
+    g+=T(XL(x4+grp/2),top-20,'4H','lbl gold strong','middle')+T(XL(x4+grp/2),bot+18,'bias '+c2t,'lbl gold strong','middle');
+    items.push({y:yy(H4LV.h),text:W2('4H H ','4H L ')+fp(H4LV.h),c:'gold'},{y:yy(H4LV.eq),text:'4H EQ '+fp(H4LV.eq),c:'gold'},{y:yy(H4LV.l),text:W2('4H L ','4H H ')+fp(H4LV.l),c:'gold'});
+  }
+  const ypx=Y(P(st.price));g+=L(x0,ypx,xl,ypx,'lv cur');items.push({y:ypx,text:'close '+fp(st.price),c:'strong'});
+  g+=T(XL(0)+2,bot+18,'06:00','lbl mut')+T(XL(12)+2,bot+18,'07:00','lbl mut');
+  g+=rlab(items,xl,xl+8,8,h-8,14);
+  el.innerHTML=SVG(w,h,g,'Chart 5 menit dengan proyeksi candle 30 menit dan 4 jam');
+  const secs=st.k*300+st.j*30;$('#pj-t').value=S.pjt;$('#pj-out').textContent=`07:${String(Math.floor(secs/60)).padStart(2,'0')}:${String(secs%60).padStart(2,'0')}`;
+  const pd=P(st.price),L4=Math.min(P(H4LV.l),P(H4LV.h)),H4v=Math.max(P(H4LV.l),P(H4LV.h)),pct=Math.round((pd-L4)/(H4v-L4)*100),zone=pct>=50?'premium':'discount',ideal=S.dir===-1?pct>=50:pct<50;
+  const rem=9*60-(7*60+st.k*5+Math.floor(st.j/2)),tr=st.tr,rr=tr.rr.toFixed(2);
+  let s30,c30;
+  if(!st.cisd){s30=tw('C2 {▼|▲} close ✓ · tunggu CISD [4175]');c30='gold';}
+  else if(!st.pass){s30=`CISD ✓ · dilewati: RR 1:${rr} di bawah 1.5`;c30='bad';}
+  else if(!st.filled){s30=tw('Limit {sell|buy} di [4175] · tunggu retrace');c30='gold';}
+  else{s30=`${W2('SELL','BUY')} ${fp(tr.ent)} · SL ${fp(tr.sl)} · RR ${rr}`;c30='dir';}
+  const rows=[['CRT 30m',s30,c30],
+    ['Target 30m',st.entry?`TP1 ${fp(4170)} ${st.tp1?'✓':'○'} · TP2 ${fp(4160)} ${st.tp2?'✓':'○'}`:'–',st.tp1?'ok':'mut'],
+    ['HTF 4H',tw('C2 {▼|▲} sweep [4202], close [4190] di dalam range'),'gold'],
+    ['Bias 4H',tw('{▼ Bearish|▲ Bullish} · searah setup ✓'),'dir'],
+    ['Posisi di range 4H',`${pct}% · ${zone}`+(ideal?` · ideal untuk ${W2('sell','buy')}`:' · sudah lewat EQ 4H'),ideal?'ok':'mut'],
+    ['Target 4H',`EQ ${fp(H4LV.eq)} · ${W2('CRT L','CRT H')} ${fp(H4LV.l)}`,'gold'],
+    ['Candle 4H',`C3 berjalan · sisa ${Math.floor(rem/60)}j ${String(rem%60).padStart(2,'0')}m`,'mut']];
+  $('#pj-rows').innerHTML=rows.map(x=>`<div role="row"><span role="cell">${x[0]}</span><b role="cell" class="${x[2]}">${x[1]}</b></div>`).join('');
+  $('#cap-proj').innerHTML=tr.m
+    ?tw('<b>Mode market.</b> CISD terkonfirmasi di close 07:05 ([4172]), tapi RR ke CRT {L|H} 30m hanya 1:'+rr+', jadi CRT Pro melewati setup ini (sama seperti bagian 4). Pilih <b>Limit</b> untuk melihat entry yang lolos.')
+    :tw('<b>Mode limit.</b> Setelah CISD terkonfirmasi di 07:05, limit {sell|buy} dipasang di [4175] dan terisi saat 07:10 retrace. Konteks 4H mendukung: C2 4H membentuk CRT {bearish|bullish}, dan saat setup terbentuk harga ada di sisi {premium|discount} range 4H. Lihat baris "Posisi di range 4H" berubah saat harga melewati EQ 4H.');
+  $('#pj-trio').innerHTML=[
+    ['tf','5m','Chart eksekusi',tw('Tempat CISD dihitung dan entry diambil. Segitiga menandai entry {sell|buy} saat setup lolos semua filter.')],
+    ['tf rngc','30m','Setup CRT',tw('C1 memberi range, C2 menyapu {CRT H|CRT L} lalu close kembali di dalam, C3 sedang berjalan. Garis titik dari range 30m diteruskan ke kanan supaya posisinya terlihat di dalam candle 4H.')],
+    ['tf gold','4H','Konteks HTF',tw('C2 4H juga menyapu {high|low} C1 4H lalu close di dalam range, jadi bias 4H {bearish|bullish}. Setelah target 30m, target berikutnya EQ lalu {CRT L|CRT H} 4H.')]]
+    .map(c=>`<div><h3><span class="${c[0]}">${c[1]}</span>${c[2]}</h3><p>${c[3]}</p></div>`).join('');
+}
+
 /* 09 killzone */
 const KZ=[{n:'NY PM',a:13*60+30,b:16*60,on:1},{n:'Asia',a:20*60,b:23*60+59,on:0},{n:'London',a:2*60,b:5*60,on:1},{n:'NY AM',a:7*60,b:10*60,on:1}];
 const ROW={'NY PM':0,'Asia':0,'NY AM':0,'London':1,'Rollover':1};
@@ -1046,7 +1177,7 @@ function renderAll(){
   document.body.classList.toggle('dir-bull',S.dir===1);
   document.body.classList.toggle('dir-bear',S.dir===-1);
   syncPressed();
-  [renderModel,renderZoom,renderCisd,renderEntry,renderOF,renderMgmt,renderGate,renderLoc,renderKZ,renderFail].forEach(fn=>{try{fn();}catch(err){console.error(err);}});
+  [renderModel,renderZoom,renderCisd,renderEntry,renderOF,renderMgmt,renderGate,renderLoc,renderKZ,renderFail,renderProj].forEach(fn=>{try{fn();}catch(err){console.error(err);}});
 }
 const timers={};
 const playBtn={cstep:'#c-play',ofn:'#o-play'};
@@ -1078,6 +1209,11 @@ $('#o-play').addEventListener('click',()=>play('ofn',1,18));
 $('#buf').addEventListener('input',e=>{S.buf=+e.target.value;renderAll();});
 $('#part').addEventListener('input',e=>{S.part=+e.target.value;renderAll();});
 $('#dep').addEventListener('input',e=>{S.dep=+e.target.value;renderAll();});
+let pjTimer=null;
+const pjStop=()=>{if(pjTimer){clearInterval(pjTimer);pjTimer=null;}$('#pj-play').textContent='▶ Putar';};
+$('#pj-play').addEventListener('click',()=>{if(pjTimer){pjStop();return;}if(S.pjt>=60)S.pjt=1;$('#pj-play').textContent='❚❚ Jeda';pjTimer=setInterval(()=>{if(S.pjt<60){S.pjt++;renderProj();}else pjStop();},320);renderProj();});
+$('#pj-reset').addEventListener('click',()=>{pjStop();S.pjt=1;renderProj();});
+$('#pj-t').addEventListener('input',e=>{pjStop();S.pjt=+e.target.value;renderProj();});
 let rz=null,lastW=0;
 const ro=new ResizeObserver(()=>{const wNow=document.querySelector('main').clientWidth;if(wNow===lastW)return;lastW=wNow;clearTimeout(rz);rz=setTimeout(renderAll,60);});
 ro.observe(document.querySelector('main'));
